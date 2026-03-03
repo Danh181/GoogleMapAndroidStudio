@@ -69,17 +69,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnSwap = findViewById(R.id.btnSwap);
         btnMyLocation = findViewById(R.id.btnMyLocation);
 
-        // button để dùng vị trí cụ thể trong tìm kiếm đường đi
+        // button Ä‘á»ƒ dĂ¹ng vá»‹ trĂ­ cá»¥ thá»ƒ trong tĂ¬m kiáº¿m Ä‘Æ°á»�ng Ä‘i
         Button btnUseCurrent = findViewById(R.id.btnUseCurrent);
         btnUseCurrent.setOnClickListener(v -> {
             if(currentLocation != null){
                 fromLocation = currentLocation.getLatitude() + "," + currentLocation.getLongitude();
-                searchFrom.setQuery(fromLocation, false);
+                searchFrom.setQuery("My Location", false);
                 Toast.makeText(MainActivity.this, "Using current location", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // button để quay về vị trí của mình
+        // button Ä‘á»ƒ quay vá»� vá»‹ trĂ­ cá»§a mĂ¬nh
         btnMyLocation.setOnClickListener(v -> {
             if (currentLocation != null && myMap != null) {
                 LatLng myLatLng = new LatLng(
@@ -99,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        // button để đổi 2 vị trí trong phần tìm đường
+        // button Ä‘á»ƒ Ä‘á»•i 2 vá»‹ trĂ­ trong pháº§n tĂ¬m Ä‘Æ°á»�ng
         btnSwap.setOnClickListener(v -> {
-            // Lấy text hiện tại
+            // Láº¥y text hiá»‡n táº¡i
             String fromText = searchFrom.getQuery().toString();
             String toText   = searchTo.getQuery().toString();
 
@@ -109,22 +109,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             searchFrom.setQuery(toText, false);
             searchTo.setQuery(fromText, false);
 
-            // Nếu bạn có lưu biến riêng thì swap luôn
+            // Náº¿u báº¡n cĂ³ lÆ°u biáº¿n riĂªng thĂ¬ swap luĂ´n
             String temp = fromLocation;
             fromLocation = toLocation;
             toLocation = temp;
 
         });
 
-        // button để tìm đường sau khi nhập đủ 2 vị trí
+        // button Ä‘á»ƒ tĂ¬m Ä‘Æ°á»�ng sau khi nháº­p Ä‘á»§ 2 vá»‹ trĂ­
         Button btnFindDirection = findViewById(R.id.btnFindDirection);
         btnFindDirection.setOnClickListener(v -> {
-            String fromInput = fromLocation;
+            String fromInput = searchFrom.getQuery().toString().trim();
             String toInput = searchTo.getQuery().toString().trim();
-            // Nếu chưa nhập From nhưng có currentLocation
-            if(fromInput.isEmpty() && currentLocation != null){
-                fromInput = currentLocation.getLatitude() + "," + currentLocation.getLongitude();
-            }
             if(fromInput.isEmpty() || toInput.isEmpty()){
                 Toast.makeText(MainActivity.this,
                         "Please enter both From and To location",
@@ -134,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             openGoogleMapsDirection(fromInput, toInput);
         });
 
-        // khởi tạo lấy lấy vị trí hiện tại từ Google Play Services
+        // khá»Ÿi táº¡o láº¥y láº¥y vá»‹ trĂ­ hiá»‡n táº¡i tá»« Google Play Services
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLastLocation();
@@ -160,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 address.getLatitude(),
                                 address.getLongitude()
                         );
-                        myMap.clear(); // xoá marker cũ
+                        myMap.clear(); // xoĂ¡ marker cÅ©
                         myMap.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(query));
@@ -184,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        // xử lý ô nhập form
+        // xá»­ lĂ½ Ă´ nháº­p form
         searchFrom.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -198,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        // xử lý ô nhập To và mở Google Map
+        // xá»­ lĂ½ Ă´ nháº­p To vĂ  má»Ÿ Google Map
         searchTo.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -224,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    // Kiểm tra quyền truy cập vị trí, sau đó lấy vị trí cuối cùng và hiển thị lên Google Map
+    // Kiá»ƒm tra quyá»�n truy cáº­p vá»‹ trĂ­, sau Ä‘Ă³ láº¥y vá»‹ trĂ­ cuá»‘i cĂ¹ng vĂ  hiá»ƒn thá»‹ lĂªn Google Map
     private void getLastLocation(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_CODE);
@@ -257,11 +253,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    // khi map load xong: thêm marker tại vị trí hiện tại và di chuyển camera đến đó
+    // khi map load xong: thĂªm marker táº¡i vá»‹ trĂ­ hiá»‡n táº¡i vĂ  di chuyá»ƒn camera Ä‘áº¿n Ä‘Ă³
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         myMap = googleMap;
-//        LatLng vietnam = new LatLng(21.0285, 105.8542); // kinh độ, vĩ độ của Hà Nội
+//        LatLng vietnam = new LatLng(21.0285, 105.8542); // kinh Ä‘á»™, vÄ© Ä‘á»™ cá»§a HĂ  Ná»™i
         LatLng vietnam = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         myMap.addMarker(new MarkerOptions().position(vietnam).title("My Location"));
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vietnam, 15));
@@ -270,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         myMap.getUiSettings().setCompassEnabled(true);
     }
 
-    // xin quyền mở vị trí
+    // xin quyá»�n má»Ÿ vá»‹ trĂ­
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -284,14 +280,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    // tạo menu cho tollbar
+    // táº¡o menu cho tollbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    // toolbar mở Menu và chọn
+    // toolbar má»Ÿ Menu vĂ  chá»�n
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -301,26 +297,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         else if(id == R.id.mapNormal){
             myMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        } // bản đồ bth
+        } // báº£n Ä‘á»“ bth
 
         else if(id == R.id.mapSatellite){
             myMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        } // bản đồ từ ảnh của Google Earth
+        } // báº£n Ä‘á»“ tá»« áº£nh cá»§a Google Earth
 
         else if(id == R.id.mapHybrid){
             myMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        } // bản đồ từ ảnh vệ tinh + tên đường
+        } // báº£n Ä‘á»“ tá»« áº£nh vá»‡ tinh + tĂªn Ä‘Æ°á»�ng
 
         else if(id == R.id.mapTerrain){
             myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        } // bản đồ địa lý
+        } // báº£n Ä‘á»“ Ä‘á»‹a lĂ½
 
         else if (id == R.id.mapDirection){
 
             LinearLayout layoutDirection = findViewById(R.id.layoutDirection);
 
             if(!isInDirectionMode){
-                // Chuyển sang Direction mode
+                // Chuyá»ƒn sang Direction mode
                 layoutDirection.setVisibility(View.VISIBLE);
                 mapSearchView.setVisibility(View.GONE);
 
@@ -334,22 +330,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 isInDirectionMode = true;
 
             } else {
-                // Quay về Search mode
+                // Quay vá»� Search mode
                 layoutDirection.setVisibility(View.GONE);
                 mapSearchView.setVisibility(View.VISIBLE);
 
-                // reset ô direction cho sạch
+                // reset Ă´ direction cho sáº¡ch
                 searchFrom.setQuery("", false);
                 searchTo.setQuery("", false);
 
                 isInDirectionMode = false;
             }
             return true;
-        } // hiện chỉ đường
+        } // hiá»‡n chá»‰ Ä‘Æ°á»�ng
         return super.onOptionsItemSelected(item);
     }
 
-    // mở Google Map
+    // má»Ÿ Google Map
     private void openGoogleMapsDirection(String from, String to){
 
         Uri uri = Uri.parse("https://www.google.com/maps/dir/?api=1"
