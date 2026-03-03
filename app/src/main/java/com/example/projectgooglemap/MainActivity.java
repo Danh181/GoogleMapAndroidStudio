@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnUseCurrent.setOnClickListener(v -> {
             if(currentLocation != null){
                 fromLocation = currentLocation.getLatitude() + "," + currentLocation.getLongitude();
-                searchFrom.setQuery("My Location", false);
+                searchFrom.setQuery(fromLocation, false);
                 Toast.makeText(MainActivity.this, "Using current location", Toast.LENGTH_SHORT).show();
             }
         });
